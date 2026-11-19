@@ -1,0 +1,116 @@
+# US ingredient and kitchen names -> what a Nordic (European) kitchen calls them.
+#
+# Each line is:  "new name" = ["old name", "another old name", ...]
+#
+# Matching ignores case and treats a space and a hyphen as the same
+# ("all purpose" = "all-purpose"). Only whole words match. Longer phrases
+# always win over shorter ones, so the order of lines does not matter.
+# Give singular and plural as separate lines when both are common.
+#
+# Your own additions and overrides go in ~/.config/cookbook-metric/names.toml
+# in the same format; they win over this file. To stop a rename from here,
+# map the name to itself there, e.g.  "shrimp" = ["shrimp"].
+#
+# Preference: the word a Nordic cook would use, then British English.
+
+# ---- Flour, grains, starch
+"wheat flour" = ["all-purpose flour", "all-purpose white flour", "AP flour", "plain flour", "cake flour", "pastry flour"]
+"strong wheat flour" = ["bread flour"]
+"wholemeal flour" = ["whole wheat flour", "whole-wheat flour", "wholewheat flour"]
+"self-raising flour" = ["self-rising flour", "self-risen flour"]
+"corn starch" = ["cornstarch"]
+"rolled oats" = ["old-fashioned oats", "old-fashioned rolled oats"]
+"semolina" = ["cream of wheat"]
+"sweetcorn" = ["corn kernels", "whole kernel corn"]
+
+# ---- Sugar and syrup
+"icing sugar" = ["powdered sugar", "confectioners sugar", "confectioners' sugar", "confectioner's sugar"]
+"caster sugar" = ["superfine sugar"]
+"sugar" = ["granulated sugar", "granulated white sugar", "white granulated sugar"]
+"brown sugar" = ["light brown sugar", "dark brown sugar"]
+"raw cane sugar" = ["turbinado sugar"]
+"light syrup" = ["corn syrup", "light corn syrup"]
+"dark syrup" = ["dark corn syrup"]
+
+# ---- Dairy
+"whipping cream" = ["heavy cream", "heavy whipping cream", "double cream"]
+"cooking cream" = ["half-and-half", "half & half", "light cream"]
+"butter" = ["unsalted butter", "salted butter"]
+"full-fat milk" = ["whole milk"]
+"skimmed milk" = ["skim milk", "nonfat milk", "fat-free milk"]
+"quark" = ["farmer's cheese", "farmers cheese"]
+
+# ---- Leavening, salt, fat
+"bicarbonate of soda" = ["baking soda"]
+"coarse salt" = ["kosher salt"]
+"salt" = ["table salt"]
+"rapeseed oil" = ["canola oil"]
+"neutral oil" = ["vegetable oil"]
+
+# ---- Chocolate, biscuits, sweets
+"dark chocolate" = ["semisweet chocolate", "semi-sweet chocolate", "bittersweet chocolate"]
+"dark chocolate chips" = ["semisweet chocolate chips", "semi-sweet chocolate chips"]
+"digestive biscuits" = ["graham crackers"]
+"digestive biscuit" = ["graham cracker"]
+
+# ---- Vegetables
+"spring onions" = ["scallions", "green onions"]
+"spring onion" = ["scallion", "green onion"]
+"paprikas" = ["bell peppers", "sweet peppers", "capsicums", "pimentos", "pimientos"]
+"paprika" = ["bell pepper", "sweet pepper", "capsicum", "pimento", "pimiento"]
+"zucchini" = ["courgette", "courgettes", "zucchinis", "summer squash", "baby marrow", "baby marrows"]
+"aubergines" = ["eggplants"]
+"aubergine" = ["eggplant"]
+"rocket" = ["arugula"]
+"chickpeas" = ["garbanzo beans", "garbanzos"]
+"swedes" = ["rutabagas"]
+"swede" = ["rutabaga"]
+"celeriac" = ["celery root"]
+"beetroots" = ["beets"]
+"beetroot" = ["beet"]
+"broad beans" = ["fava beans"]
+"butter beans" = ["lima beans"]
+"white beans" = ["navy beans"]
+"green beans" = ["string beans"]
+"pickled gherkins" = ["dill pickles"]
+"pickled gherkin" = ["dill pickle"]
+
+# ---- Herbs and spices
+"coriander" = ["cilantro"]
+"chilli flakes" = ["red pepper flakes", "crushed red pepper", "crushed red pepper flakes"]
+
+# ---- Meat and stock
+"minced beef" = ["ground beef"]
+"minced pork" = ["ground pork"]
+"minced lamb" = ["ground lamb"]
+"minced veal" = ["ground veal"]
+"minced chicken" = ["ground chicken"]
+"minced turkey" = ["ground turkey"]
+"minced meat" = ["ground meat", "ground chuck"]
+"beef fillet" = ["beef tenderloin"]
+"pork fillet" = ["pork tenderloin"]
+"chicken stock" = ["chicken broth"]
+"beef stock" = ["beef broth"]
+"vegetable stock" = ["vegetable broth"]
+"stock cube" = ["bouillon cube"]
+"stock cubes" = ["bouillon cubes"]
+
+# ---- Drinks
+"soda water" = ["club soda", "seltzer", "seltzer water"]
+
+# ---- Kitchen things (tools and instructions)
+"baking paper" = ["parchment paper", "parchment"]
+"greaseproof paper" = ["wax paper", "waxed paper"]
+"cling film" = ["plastic wrap", "saran wrap"]
+"aluminium foil" = ["aluminum foil"]
+"kitchen paper" = ["paper towel", "paper towels"]
+"baking tray" = ["baking sheet", "cookie sheet", "sheet pan", "rimmed baking sheet"]
+"baking trays" = ["baking sheets", "cookie sheets", "sheet pans"]
+"frying pan" = ["skillet"]
+"frying pans" = ["skillets"]
+"freezer bag" = ["zip-top bag", "ziploc bag", "resealable bag", "resealable plastic bag"]
+"sugar thermometer" = ["candy thermometer"]
+"oven grill" = ["broiler"]
+"grill" = ["broil"]
+"grilled" = ["broiled"]
+"grilling" = ["broiling"]

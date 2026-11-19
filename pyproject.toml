@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cookbook-metric"
+version = "0.1.0"
+description = "Convert Nextcloud Cookbook recipes to rounded metric units and Nordic ingredient names"
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+cookbook-metric = "cookbook_metric.cli:main"
+
+[tool.setuptools]
+packages = ["cookbook_metric"]
+
+[tool.setuptools.package-data]
+cookbook_metric = ["names.toml"]
