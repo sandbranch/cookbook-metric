@@ -1,0 +1,125 @@
+# Candidate renames for cookbook_metric/names.toml, built by
+# tools/build_name_candidates.py. Nothing here is active: every rename is
+# commented out. Uncomment the ones you want and move them into names.toml
+# (or ~/.config/cookbook-metric/names.toml). Names already in names.toml
+# are left out.
+#
+# Sources: Wikidata (CC0) and the Open Food Facts ingredient taxonomy
+# (AGPL-3.0). The comment above each line says which item and why.
+
+# wikidata+off Q618345, OFF en:apple-puree: Wikidata en-gb label differs from en, sv äppelmos
+# "apple puree" = ["apple sauce"]
+# wikidata+off Q154389, OFF en:molasses: Wikidata en-gb label differs from en, sv Melass
+# "black treacle" = ["molasses"]
+# wikidata Q5457841: Wikidata en-gb label differs from en, sv Luffarbiff
+# "butlers' steak" = ["flat iron steak"]
+# wikidata+off Q104007010, OFF en:lima-bean: Wikidata en-gb label differs from en, sv limaböna
+# "butter bean" = ["lima bean"]
+# wikidata+off Q181560, OFF en:carambola: an English name equals the Swedish word, sv carambola
+# "carambola" = ["star fruit"]
+# wikidata+off Q1474, OFF en:belgian-endive: Wikidata en-gb label differs from en
+# "chicory" = ["belgian endive"]
+# wikidata+off Q1762893, OFF en:romaine-lettuce: Wikidata en-gb label differs from en, sv Romansallat
+# "cos lettuce" = ["romaine lettuce"]
+# wikidata Q68353770: Wikidata en-gb label differs from en
+# "courgette flower" = ["zucchini flower"]
+# wikidata Q2291557: an English name equals the Swedish word, sv Dukkah
+# "dukkah" = ["duqqa"]
+# wikidata+off Q932214, OFF en:emmental: an English name equals the Swedish word, sv Emmentaler
+# "emmentaler" = ["emmental", "emmental cheese"]
+# wikidata Q962033: an English name equals the Swedish word, sv Katja
+# "katja" = ["katy"]
+# wikidata+off Q113739, OFF en:katsuobushi: an English name equals the Swedish word, sv Katsuobushi
+# "katsuobushi" = ["bonito flakes"]
+# wikidata+off Q185749, OFF en:kefir: an English name equals the Swedish word, sv kefir
+# "kefir" = ["kephir"]
+# wikidata+off Q13194, OFF en:kiwifruit: an English name equals the Swedish word, sv Kiwi
+# "kiwi" = ["kiwifruit"]
+# wikidata+off Q20034, OFF en:lasagne: an English name equals the Swedish word, sv lasagne
+# "lasagne" = ["lasagna", "lasagna pasta"]
+# wikidata+off Q13582643, OFF en:lupin-bean: an English name equals the Swedish word, sv lupin
+# "lupin" = ["lupine bean"]
+# wikidata Q2632883: Wikidata en-gb label differs from en
+# "matzoon" = ["matsoni"]
+# wikidata+off Q12330939, OFF en:papaya: an English name equals the Swedish word, sv papaya, papaja
+# "papaya" = ["papaw", "pawpaw"]
+# wikidata+off Q2702783, OFF en:flat-peach: an English name equals the Swedish word, sv Paraguayo
+# "paraguayo" = ["flat peach", "saturn peach", "donut peach"]
+# wikidata+off Q155922, OFF en:parmigiano-reggiano: an English name equals the Swedish word, sv parmesan
+# "parmesan" = ["parmigiano reggiano", "parmigiano reggiano cheese"]
+# wikidata+off Q165227, OFF en:cape-gooseberry: an English name equals the Swedish word, sv Physalis
+# "physalis" = ["goldenberry", "goldenberries", "golden berry"]
+# wikidata+off Q353817, OFF en:pomelo: an English name equals the Swedish word, sv Pomelo
+# "pomelo" = ["pummelo"]
+# off en:rocket: an English name equals the Swedish word, sv rucola, rucolasallad, ruccola, ruccolasallad
+# "rucola" = ["garden rocket"]
+# wikidata Q5183373: Wikidata en-gb label differs from en
+# "set honey" = ["creamed honey"]
+# wikidata Q626292: Wikidata en-gb label differs from en, sv sötningsmedel
+# "sugar substitute" = ["non-nutritive sweetener"]
+# wikidata+off Q815740, OFF en:surimi: an English name equals the Swedish word, sv Surimi
+# "surimi" = ["imitation crab", "imitation crab meat"]
+# wikidata Q1915137: an English name equals the Swedish word, sv Sweetie
+# "sweetie" = ["oroblanco"]
+# wikidata+off Q383389, OFF en:tahini: an English name equals the Swedish word, sv tahini
+# "tahini" = ["tehina"]
+# wikidata Q2391283: an English name equals the Swedish word, sv tamarind
+# "tamarind" = ["tamarindus indica"]
+# wikidata+off Q432426, OFF en:bird's-eye-chili: an English name equals the Swedish word, sv thai chili
+# "thai chili" = ["bird's eye chili", "bird's eye chilli"]
+# wikidata Q4820063: an English name equals the Swedish word, sv Vinblad
+# "vinblad" = ["grape leaves"]
+# wikidata Q103772657: an English name equals the Swedish word, sv Yuzu
+# "yuzu" = ["yuzufruit"]
+
+# ---- Spelling only (US -ize/-or/chili -> British). Not Nordic words;
+# take these only if you want British spelling as well.
+
+# wikidata+off Q250432, OFF en:bulgur: an English name equals the Swedish word (spelling only), sv bulgur
+# "bulgur" = ["bulgar"]
+# wikidata+off Q25496135, OFF en:caramelised-sugar: Wikidata en-gb label differs from en (spelling only), sv karamelliserat socker
+# "caramelised sugar" = ["caramelized sugar"]
+# wikidata Q1026822: Wikidata en-gb label differs from en (spelling only)
+# "chilli oil" = ["chili oil"]
+# wikidata+off Q165199, OFF en:chili-pepper: Wikidata en-gb label differs from en (spelling only), sv chilipeppar
+# "chilli pepper" = ["chili pepper"]
+# wikidata+off Q1072946, OFF en:chili-powder: Wikidata en-gb label differs from en (spelling only), sv chilipulver
+# "chilli powder" = ["chili powder"]
+# wikidata+off Q76605, OFF en:couscous: an English name equals the Swedish word (spelling only), sv couscous
+# "couscous" = ["cous cous"]
+# wikidata Q56395871: Wikidata en-gb label differs from en (spelling only)
+# "dried chilli pepper" = ["dried chili pepper"]
+# wikidata Q5458209: Wikidata en-gb label differs from en (spelling only)
+# "flavoured milk" = ["flavored milk"]
+# wikidata Q685077: an English name equals the Swedish word (spelling only), sv Gomasio
+# "gomasio" = ["gomashio"]
+# wikidata Q123160920: Wikidata en-gb label differs from en (spelling only)
+# "homogenised cheese" = ["homogenized cheese"]
+# wikidata Q4205889: Wikidata en-gb label differs from en (spelling only)
+# "iodised oil" = ["ethiodized oil"]
+# wikidata+off Q902318, OFF en:iodised-salt: Wikidata en-us label differs from en (spelling only), sv salt med jod
+# "iodised salt" = ["iodized salt"]
+# wikidata Q478654: an English name equals the Swedish word (spelling only), sv Kajmak
+# "kajmak" = ["kaymak"]
+# wikidata Q5122903: an English name equals the Swedish word (spelling only), sv kumquat
+# "kumquat" = ["cumquat"]
+# wikidata Q61081: an English name equals the Swedish word (spelling only), sv Kumys
+# "kumys" = ["kumis"]
+# wikidata Q257106: Wikidata en-us label differs from en (spelling only), sv Lakritsrot
+# "liquorice" = ["licorice"]
+# wikidata Q465554: Wikidata en-gb label differs from en (spelling only)
+# "mahlab" = ["mahleb"]
+# wikidata+off Q190024, OFF en:mandarin: an English name equals the Swedish word (spelling only), sv mandarin
+# "mandarin" = ["mandarine"]
+# wikidata+off Q7635866, OFF en:mung-bean-sprout: Wikidata en-gb label differs from en (spelling only), sv mungbönskott
+# "mung sprout" = ["mung bean sprout"]
+# wikidata+off Q840171, OFF en:sour-cream: Wikidata en-gb label differs from en (spelling only), sv syrad grädde
+# "soured cream" = ["sour cream"]
+# wikidata Q1036741: Wikidata en-gb label differs from en (spelling only)
+# "soya bean sprout" = ["soybean sprout"]
+# wikidata+off Q917043, OFF en:okara: Wikidata en-gb label differs from en (spelling only)
+# "soya pulp" = ["soy pulp"]
+# wikidata Q6497852: an English name equals the Swedish word (spelling only), sv Wienerschnitzel
+# "wienerschnitzel" = ["wiener schnitzel"]
+# wikidata+off Q13317, OFF en:yogurt: an English name equals the Swedish word (spelling only), sv yoghurt
+# "yoghurt" = ["yogurt", "yogourt"]

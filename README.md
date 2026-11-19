@@ -97,3 +97,29 @@ dev/local-nextcloud.sh down
 
 AGPL-3.0-or-later, the same as Nextcloud Cookbook, so the conversion logic can
 move into the app as an import filter later.
+
+## Name candidates
+
+`data/` holds a reviewable list of more names, built by
+`python3 tools/build_name_candidates.py` (stdlib only, fetches both sources):
+
+- `data/name-candidates.tsv`: one row per food concept with its English,
+  British and US names, English synonyms, Swedish, Danish, Norwegian (bokmål)
+  and Finnish names, and a suggested rename where the sources give evidence for
+  one (a British label that differs from the US one, or an English name that is
+  also the Swedish word, like paprika).
+- `data/names-candidates.toml`: those suggestions in `names.toml` format, all
+  commented out. Uncomment the ones you want and move them into
+  `cookbook_metric/names.toml` or your own `~/.config/cookbook-metric/names.toml`.
+- `data/names-sv.tsv`: English name to Swedish name, the seed for a later
+  "translate to Swedish" mode.
+
+Nothing in `data/` is used by the converter. The Swedish labels come straight
+from the sources and need a cook's eye before use.
+
+Sources: [Wikidata](https://www.wikidata.org/) labels (CC0) and the
+[Open Food Facts](https://world.openfoodfacts.org/) ingredient taxonomy,
+`taxonomies/food/ingredients.txt` in
+[openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server)
+(AGPL-3.0, like this project). Only a selection of names from the taxonomy is
+kept here, not the taxonomy itself.
