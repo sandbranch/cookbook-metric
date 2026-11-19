@@ -48,6 +48,7 @@
 # wikidata+off Q155922, OFF en:parmigiano-reggiano: an English name equals the Swedish word, sv parmesan
 # "parmesan" = ["parmigiano reggiano", "parmigiano reggiano cheese"]
 # wikidata+off Q165227, OFF en:cape-gooseberry: an English name equals the Swedish word, sv Physalis
+# Accepted 2026-11-19, now in cookbook_metric/names.toml (Swedish: physalis).
 # "physalis" = ["goldenberry", "goldenberries", "golden berry"]
 # wikidata+off Q353817, OFF en:pomelo: an English name equals the Swedish word, sv Pomelo
 # "pomelo" = ["pummelo"]

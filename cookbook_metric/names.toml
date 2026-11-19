@@ -75,6 +75,9 @@
 "pickled gherkins" = ["dill pickles"]
 "pickled gherkin" = ["dill pickle"]
 
+# ---- Fruit
+"physalis" = ["goldenberry", "goldenberries", "golden berry", "golden berries", "cape gooseberry", "cape gooseberries", "ground cherry", "ground cherries"]
+
 # ---- Herbs and spices
 "coriander" = ["cilantro"]
 "chilli flakes" = ["red pepper flakes", "crushed red pepper", "crushed red pepper flakes"]
