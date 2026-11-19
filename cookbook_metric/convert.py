@@ -7,7 +7,7 @@ Output keeps the shape Nextcloud Cookbook's servings calculator understands:
 import re
 import unicodedata
 
-from .densities import grams_per_cup
+from .densities import density
 from .names import europeanize
 
 # ---------------------------------------------------------------- amounts
@@ -77,6 +77,44 @@ def metric_quantity(values, base):
     return "-".join(_fmt(r) for r in rounded) + " " + base
 
 
+def _round_step(x, step):
+    r = round(x / step) * step
+    return r if r > 0 else step
+
+
+def volume_quantity(values, unit="dl"):
+    """Format one ml value or a range as a cook would measure it.
+
+    unit "ml": rounded ml/l as metric_quantity does.
+    unit "dl" (Nordic): ml below 50 ml, then dl in quarter steps below 2 dl,
+    half steps below 10 dl, whole dl below 20 dl, then l in half litres.
+    The first value picks the unit and step for the whole range.
+    """
+    if unit == "ml":
+        return metric_quantity(values, "ml")
+    v = values[0]
+    if v < 50:
+        return metric_quantity(values, "ml")
+    if v < 200:
+        step, div, name = 0.25, 100, "dl"
+    elif v < 1000:
+        step, div, name = 0.5, 100, "dl"
+    elif v < 2000:
+        step, div, name = 1, 100, "dl"
+    else:
+        step, div, name = 0.5, 1000, "l"
+    return "-".join(_fmt(_round_step(x / div, step)) for x in values) + " " + name
+
+
+def both_measures(ml_values, gram_values, options):
+    """'5.5 dl (275 g)' or '275 g (5.5 dl)' per options.solids."""
+    vol = volume_quantity(ml_values, options.volume)
+    grams = metric_quantity(gram_values, "g")
+    if options.solids == "grams-first":
+        return f"{grams} ({vol})"
+    return f"{vol} ({grams})"
+
+
 # ---------------------------------------------------------------- units
 
 ML_PER_CUP = 236.588
@@ -143,12 +181,19 @@ def _ingredient_after(text, end):
 
 
 class Options:
-    def __init__(self, spoons="keep", names=True):
+    def __init__(self, spoons="keep", names=True, volume="dl", solids="volume-first"):
         # "keep": leave tsp/tbsp alone (metric kitchens use 5/15 ml spoons).
         # "ml": write them as 5 ml / 15 ml.
         self.spoons = spoons
         # Rename US ingredient names to European ones (names.py).
         self.names = names
+        # Volume unit for cups and liquids: "dl" (Nordic) or "ml".
+        self.volume = volume
+        # Cups of solids such as flour and sugar:
+        #   "volume-first": 5.5 dl (275 g) wheat flour   (Cookbook scales the dl)
+        #   "grams-first":  275 g (5.5 dl) wheat flour   (Cookbook scales the g)
+        #   "grams":        275 g wheat flour
+        self.solids = solids
 
 
 def _convert_quantities(text, options, context):
@@ -167,10 +212,14 @@ def _convert_quantities(text, options, context):
             name = _ingredient_after(text, m.end())
             if not re.search(r"[A-Za-z]", name):
                 name = context
-            gpc = grams_per_cup(name)
-            if gpc:
-                return metric_quantity([v * gpc for v in values], "g")
-        return metric_quantity([v * factor for v in values], "ml")
+            d = density(name)
+            if d:
+                gpc, by_volume = d
+                grams = [v * gpc for v in values]
+                if by_volume and options.solids != "grams":
+                    return both_measures([v * factor for v in values], grams, options)
+                return metric_quantity(grams, "g")
+        return volume_quantity([v * factor for v in values], options.volume)
 
     return QTY_RE.sub(repl, text)
 
@@ -248,22 +297,85 @@ def convert_text(text, options=None, context=""):
     return text
 
 
+_GRAM_LEAD = re.compile(
+    rf"(?P<a>{_AMT})(?:{_RANGE_SEP}(?P<b>{_AMT}))?\s*(?P<unit>g|grams?|grammes?|kg|kilograms?)(?![A-Za-z])\s*",
+    re.IGNORECASE,
+)
+_CUP_ECHO = re.compile(
+    rf"\s*\(\s*{_APPROX}(?P<a>{_AMT})(?:{_RANGE_SEP}(?P<b>{_AMT}))?\s*cups?\s*\)", re.IGNORECASE
+)
+_HAS_VOLUME = re.compile(rf"{_START}{_AMT}\s*(?:ml|cl|dl|l)(?![A-Za-z])", re.IGNORECASE)
+
+
+def _add_volume_to_grams(line, options):
+    """'140 grams flour (~1 cup)' or '200 g flour' -> '2.5 dl (140 g) flour'.
+
+    Only for ingredients measured by volume in Nordic kitchens (densities.py).
+    The source's own cup value is used when it gives one, else the density.
+    """
+    m = _GRAM_LEAD.match(line)
+    if not m:
+        return line
+    rest = line[m.end():]
+    if _HAS_VOLUME.search(rest):
+        return line
+    d = density(re.sub(r"\([^)]*\)", " ", rest))
+    if not d or not d[1]:
+        return line
+    scale = 1000 if m["unit"].lower().startswith("k") else 1
+    grams = [parse_amount(m["a"]) * scale] + ([parse_amount(m["b"]) * scale] if m["b"] else [])
+    echo = _CUP_ECHO.search(rest)
+    if echo:
+        cups = [parse_amount(echo["a"])] + ([parse_amount(echo["b"])] if echo["b"] else [])
+        ml = [c * ML_PER_CUP for c in cups]
+        rest = rest[: echo.start()] + rest[echo.end():]
+    else:
+        ml = [g / d[0] * ML_PER_CUP for g in grams]
+        if ml[0] < 50:
+            return line  # a spoonful; the gram value says enough
+    # Keep the source's gram figure as written, only the unit name shortened.
+    unit = "kg" if scale == 1000 else "g"
+    src = m["a"] + (f"-{m['b']}" if m["b"] else "")
+    vol = volume_quantity(ml, options.volume)
+    lead = f"{src} {unit} ({vol})" if options.solids == "grams-first" else f"{vol} ({src} {unit})"
+    return f"{lead} {rest.strip()}"
+
+
+_ML_LEAD = re.compile(
+    rf"(?P<a>{_AMT})(?:{_RANGE_SEP}(?P<b>{_AMT}))?\s*(?:ml|millilit(?:er|re)s?)(?![A-Za-z])", re.IGNORECASE
+)
+
+
+def _ml_lead_to_dl(line):
+    """'240 ml cream' -> '2.4 dl cream': an exact unit change, no rounding."""
+    m = _ML_LEAD.match(line)
+    if not m or parse_amount(m["a"]) < 50:
+        return line
+    vals = [parse_amount(m["a"])] + ([parse_amount(m["b"])] if m["b"] else [])
+    return "-".join(_fmt(v / 100) for v in vals) + " dl" + line[m.end():]
+
+
 def convert_ingredient(line, options=None, tidy=True):
-    options = options or Options()
     """Convert one ingredient line.
 
     With tidy, '((x))' becomes '(x)' (an import artifact), and when the line
     already starts with a metric amount, a parenthesis holding only an
     imperial echo such as '(~1 cup)' is dropped.
     """
+    options = options or Options()
     if line.startswith("## "):
         return line
     if tidy:
         line = _DOUBLE_PAREN.sub(r"(\1)", line)
+    if options.solids != "grams":
+        line = _add_volume_to_grams(line, options)
+    if tidy:
         if re.match(METRIC_QTY, line, re.IGNORECASE):
             line = _IMPERIAL_ONLY_PAREN.sub("", line)
     context = re.sub(r"\([^)]*\)", " ", line)
     line = convert_text(line, options, context=context)
+    if options.volume == "dl":
+        line = _ml_lead_to_dl(line)
     if tidy and re.match(METRIC_QTY, line, re.IGNORECASE):
         # "230 g (2 sticks) butter": the stick count only echoes the amount.
         line = _STICKS_PAREN.sub("", line)

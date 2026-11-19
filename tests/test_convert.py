@@ -31,17 +31,23 @@ class Ingredients(unittest.TestCase):
         # Okonomiyaki as imported from norecipes.com
         ("400 grams cabbage ((~half a small head))", "400 grams cabbage (~half a small head)"),
         ("60 grams scallions ((~2 , thinly sliced))", "60 grams spring onions (~2 , thinly sliced)"),
-        ("140 grams all-purpose flour ((~1 cup))", "140 grams wheat flour"),
-        ("1/2 cup dashi stock ((or cold water))", "120 ml dashi stock (or cold water)"),
+        ("140 grams all-purpose flour ((~1 cup))", "2.5 dl (140 g) wheat flour"),
+        ("1/2 cup dashi stock ((or cold water))", "1.25 dl dashi stock (or cold water)"),
         # Cups of solids are weighed, cups of liquids measured
-        ("2 1/4 cups all-purpose flour", "275 g wheat flour"),
-        ("1 cup packed brown sugar", "210 g packed brown sugar"),
-        ("3/4 cup powdered sugar", "80 g icing sugar"),
-        ("1 1/2 cups milk", "350 ml milk"),
+        ("2 1/4 cups all-purpose flour", "5.5 dl (275 g) wheat flour"),
+        ("1 cup packed brown sugar", "2.5 dl (210 g) packed brown sugar"),
+        ("3/4 cup powdered sugar", "1.75 dl (80 g) icing sugar"),
+        ("1 1/2 cups milk", "3.5 dl milk"),
         ("1 cup (2 sticks) unsalted butter, softened", "230 g butter, softened"),
         # The source's own metric value is kept
-        ("1 cup (240 ml) heavy cream", "240 ml whipping cream"),
+        ("1 cup (240 ml) heavy cream", "2.4 dl whipping cream"),
         ("225 g (8 oz) cream cheese", "225 g cream cheese"),
+        # Gram-only lines get a dl amount when the ingredient is measured by volume
+        ("200 g plain flour", "4 dl (200 g) wheat flour"),
+        ("100 g sugar (1/2 cup)", "1.25 dl (100 g) sugar"),
+        ("250 g butter", "250 g butter"),
+        ("10 g salt", "10 g salt"),
+        ("400 grams cabbage", "400 grams cabbage"),
         # Mass, ranges, parenthesised sizes
         ("8 oz cream cheese", "230 g cream cheese"),
         ("2-3 lbs chicken thighs", "900-1350 g chicken thighs"),
@@ -76,7 +82,18 @@ class Ingredients(unittest.TestCase):
         self.assertEqual(convert_ingredient("2 tbsp olive oil", opts), "30 ml olive oil")
 
     def test_keep_names(self):
-        self.assertEqual(convert_ingredient("1 cup all-purpose flour", Options(names=False)), "120 g all-purpose flour")
+        self.assertEqual(convert_ingredient("1 cup all-purpose flour", Options(names=False)), "2.5 dl (120 g) all-purpose flour")
+
+    def test_solids_and_volume_options(self):
+        line = "2 1/4 cups all-purpose flour"
+        self.assertEqual(convert_ingredient(line, Options(solids="grams-first")), "275 g (5.5 dl) wheat flour")
+        self.assertEqual(convert_ingredient(line, Options(solids="grams")), "275 g wheat flour")
+        self.assertEqual(convert_ingredient(line, Options(volume="ml")), "525 ml (275 g) wheat flour")
+        self.assertEqual(convert_ingredient("1 1/2 cups milk", Options(volume="ml")), "350 ml milk")
+        self.assertEqual(convert_ingredient("140 grams flour ((~1 cup))", Options(solids="grams-first")), "140 g (2.5 dl) flour")
+        for opts in (Options(solids="grams-first"), Options(volume="ml"), Options(solids="grams")):
+            once = convert_ingredient(line, opts)
+            self.assertEqual(convert_ingredient(once, opts), once)
 
 
 class Instructions(unittest.TestCase):
@@ -89,7 +106,7 @@ class Instructions(unittest.TestCase):
         ("Let rise at 80°F.", "Let rise at 25°C."),
         ("Grease a 9x13-inch pan.", "Grease a 23x33 cm pan."),
         ("Line a baking sheet with parchment paper.", "Line a baking tray with baking paper."),
-        ("Add 1 cup flour and 2 cups water.", "Add 120 g flour and 475 ml water."),
+        ("Add 1 cup flour and 2 cups water.", "Add 2.5 dl (120 g) flour and 4.5 dl water."),
         ("Add 1 oz. cheese and stir.", "Add 30 g cheese and stir."),
         ("Bake for 20 minutes.", "Bake for 20 minutes."),
     ]
@@ -124,7 +141,7 @@ class Recipe(unittest.TestCase):
     def test_fixture(self):
         recipe = json.loads((FIXTURES / "Okonomiyaki" / "recipe.json").read_text())
         new, changes = convert_recipe(recipe, NO_USER)
-        self.assertIn("120 ml dashi stock (or cold water)", new["recipeIngredient"])
+        self.assertIn("1.25 dl dashi stock (or cold water)", new["recipeIngredient"])
         self.assertIn("Bake at 200°C until crisp.", new["recipeInstructions"])
         self.assertEqual(new["tool"], ["baking tray", "23 cm frying pan"])
         self.assertTrue(changes)
@@ -141,7 +158,7 @@ class Recipe(unittest.TestCase):
             self.assertEqual(f.read_text(), before)
             cli.main(["convert", "--dir", d, "--apply"])
             after = json.loads(f.read_text())
-            self.assertIn("120 ml dashi stock (or cold water)", after["recipeIngredient"])
+            self.assertIn("1.25 dl dashi stock (or cold water)", after["recipeIngredient"])
             self.assertNotEqual(after["dateModified"], json.loads(before)["dateModified"])
             backup = next((Path(d) / "backups").iterdir())
             cli.main(["restore", "--dir", d, str(backup)])

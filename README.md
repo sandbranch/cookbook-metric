@@ -4,10 +4,10 @@ Converts the recipes stored in [Nextcloud Cookbook](https://github.com/nextcloud
 to rounded metric units and Nordic/European ingredient names, in place.
 
 ```
-1/2 cup dashi stock ((or cold water))     ->  120 ml dashi stock (or cold water)
-2 1/4 cups all-purpose flour              ->  275 g wheat flour
+1/2 cup dashi stock ((or cold water))     ->  1.25 dl dashi stock (or cold water)
+2 1/4 cups all-purpose flour              ->  5.5 dl (275 g) wheat flour
 1 cup (2 sticks) unsalted butter          ->  230 g butter
-140 grams all-purpose flour ((~1 cup))    ->  140 grams wheat flour
+140 grams all-purpose flour ((~1 cup))    ->  2.5 dl (140 g) wheat flour
 2 green bell peppers, diced               ->  2 green paprikas, diced
 Preheat oven to 350°F (175°C).            ->  Preheat oven to 175°C.
 Grease a 9x13-inch pan.                   ->  Grease a 23x33 cm pan.
@@ -21,13 +21,23 @@ tool rewrites those files over WebDAV and asks Cookbook to reindex.
 
 ## What it converts
 
-- **Cups of solids to grams**, using a density table from King Arthur Baking's
-  [ingredient weight chart](https://www.kingarthurbaking.com/learn/ingredient-weight-chart)
-  (flour, sugars, butter, oats, nuts, cheese, ...). Cups of liquids, and
-  anything not in the table, become ml.
-- **oz, lb to g; fl oz, pints, quarts, gallons to ml.** Values are rounded to
-  what you would measure: steps of 5 below 50, 10 below 250, 25 below 1000,
-  then kg/l.
+- **Volume in dl, Nordic style.** Cups and liquids become dl in quarter steps
+  below 2 dl and half steps above (ml only below 50 ml). `--volume ml` gives ml.
+  A metric amount already given in ml at the start of a line becomes dl
+  exactly (240 ml to 2.4 dl).
+- **Flour, sugar and other dry goods get both: volume first, grams after**,
+  `5.5 dl (275 g) wheat flour`. Grams come from a density table based on King
+  Arthur Baking's
+  [ingredient weight chart](https://www.kingarthurbaking.com/learn/ingredient-weight-chart).
+  Lines that arrive in grams only get the dl added the same way
+  (`200 g plain flour` to `4 dl (200 g) wheat flour`), from the source's own
+  cup value when it gives one. Butter, cream cheese and salt are weighed in
+  Nordic kitchens, so they get grams only. Cookbook's servings calculator
+  scales the first amount on a line, so here it scales the dl; the grams in
+  parentheses stay at the original servings. `--solids grams-first` puts grams
+  first (then grams scale), `--solids grams` drops the volume.
+- **oz, lb to g.** Rounded to what you would weigh: steps of 5 below 50, 10
+  below 250, 25 below 1000, then kg.
 - **°F to °C**, ovens in steps of 10 (350°F becomes 180°C). Where the recipe
   already gives °C next to °F, that value is kept and the °F dropped.
 - **Inches to cm**, including pan sizes such as 9x13-inch.

@@ -47,7 +47,7 @@ def open_store(args):
 
 
 def options_from(args):
-    return Options(spoons=args.spoons, names=not args.keep_names)
+    return Options(spoons=args.spoons, names=not args.keep_names, volume=args.volume, solids=args.solids)
 
 
 def cmd_login(args):
@@ -135,6 +135,10 @@ def main(argv=None):
     def conversion(sp):
         sp.add_argument("--spoons", choices=["keep", "ml"], default="keep",
                         help="keep tsp/tbsp as they are (default) or write them as 5/15 ml")
+        sp.add_argument("--volume", choices=["dl", "ml"], default="dl",
+                        help="volume unit for cups and liquids (default dl)")
+        sp.add_argument("--solids", choices=["volume-first", "grams-first", "grams"], default="volume-first",
+                        help="flour, sugar etc.: '5.5 dl (275 g)' (default), '275 g (5.5 dl)' or grams only")
         sp.add_argument("--keep-names", action="store_true",
                         help="do not rename US ingredient names (all-purpose flour -> wheat flour)")
 

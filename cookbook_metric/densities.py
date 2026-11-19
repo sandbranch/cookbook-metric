@@ -32,10 +32,10 @@ _TABLE = [
     (r"(brown|muscovado|demerara) sugar", 213),
     (r"(powdered|confectioners'?|icing) sugar", 113),
     (r"\bsugar\b", 198),
-    # Fats and spreads
+    # Fats and spreads (butter and cream cheese are weighed, not measured)
     (r"peanut butter", 270),
-    (r"\bbutter\b", 226),
-    (r"cream cheese", 227),
+    (r"\bbutter\b", 226, False),
+    (r"cream cheese", 227, False),
     (r"mayo(nnaise)?", 226),
     # Sweet and sticky
     (r"\bhoney\b", 336),
@@ -57,12 +57,14 @@ _TABLE = [
     (r"parmesan|parmigiano|pecorino", 100),
     (r"(cheddar|mozzarella|jack|swiss|gruy[eè]re|emmental|cheese)", 113),
     # Salt and leavening, for when a recipe measures them in cups
-    (r"baking soda|bicarbonate", 288),
-    (r"kosher salt", 128),
-    (r"\bsalt\b", 288),
+    (r"baking soda|bicarbonate", 288, False),
+    (r"kosher salt|coarse salt", 128, False),
+    (r"\bsalt\b", 288, False),
 ]
 
-_COMPILED = [(re.compile(p, re.IGNORECASE), g) for p, g in _TABLE]
+# A third element False means Nordic kitchens weigh it rather than measure
+# it in dl, so it gets grams only. Everything else gets both.
+_COMPILED = [(re.compile(e[0], re.IGNORECASE), e[1], e[2] if len(e) > 2 else True) for e in _TABLE]
 
 # Ingredient words that mean "measure this by volume" even if a solid
 # also appears in the text, e.g. "milk (or butter milk)", "coconut milk".
@@ -79,6 +81,12 @@ def grams_per_cup(text):
     None means: convert by volume. That is the answer for liquids and for
     anything the table does not know.
     """
+    d = density(text)
+    return d[0] if d else None
+
+
+def density(text):
+    """Return (grams per US cup, measured by volume in Nordic kitchens) or None."""
     if not text:
         return None
     if _LIQUID.search(text) and not re.search(
@@ -87,7 +95,7 @@ def grams_per_cup(text):
         re.IGNORECASE,
     ):
         return None
-    for pattern, grams in _COMPILED:
+    for pattern, grams, by_volume in _COMPILED:
         if pattern.search(text):
-            return grams
+            return grams, by_volume
     return None

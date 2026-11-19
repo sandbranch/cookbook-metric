@@ -53,7 +53,7 @@ e2e)
 		python3 -c 'import json,sys
 r = json.load(sys.stdin)
 print("Cookbook now serves:", r["recipeIngredient"], r["recipeInstructions"], r["tool"], sep="\n  ")
-assert "120 ml dashi stock (or cold water)" in r["recipeIngredient"], "not converted"'
+assert "1.25 dl dashi stock (or cold water)" in r["recipeIngredient"], "not converted"'
 	echo "Second run must find nothing:"
 	run convert | grep -q "nothing to convert"
 	run restore "$(ls -d "$XDG_DATA_HOME"/cookbook-metric/backups/*)"
